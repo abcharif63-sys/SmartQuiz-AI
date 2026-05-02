@@ -14,12 +14,12 @@ if (localPropertiesFile.exists()) {
 
 android {
     namespace = "ma.uca.smartquizai"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "ma.uca.smartquizai"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -44,8 +44,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
         isCoreLibraryDesugaringEnabled = true
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
     }
     buildFeatures {
         buildConfig = true
@@ -61,8 +61,8 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.poi.ooxml)
-    implementation("com.tom-roush:pdfbox-android:2.0.27.0")
-    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+    implementation(libs.pdfbox.android)
+    implementation(libs.google.ai.generativeai)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

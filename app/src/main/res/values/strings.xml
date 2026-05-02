@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SmartQuiz AI</string>
+    <string name="btn_import">Importer PDF / PPT</string>
+    <string name="btn_generate">Générer le Quiz avec l\'IA</string>
+    <string name="btn_validate">Valider</string>
+    <string name="btn_next">Suivant →</string>
+    <string name="btn_retry">Reprendre les erreurs</string>
+    <string name="btn_home">← Retour à l\'accueil</string>
+    <string name="no_file">Aucun fichier sélectionné</string>
+    <string name="generating">L\'IA analyse ton cours…</string>
+    <string name="error_no_file">Importe d\'abord un fichier PDF ou PPT.</string>
+    <string name="error_api">Erreur de l\'API. Vérifie ta connexion.</string>
+    <string name="label_docs">Docs</string>
+    <string name="label_quizzes">Quiz</string>
+    <string name="label_avg">Moy.</string>
+    <string name="result_perfect">Parfait ! 🏆</string>
+    <string name="result_great">Excellent travail !</string>
+    <string name="result_good">Bien joué !</string>
+    <string name="result_keep_going">Continue à t\'entraîner !</string>
+</resources>

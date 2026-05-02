@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Backgrounds -->
+    <color name="bg_primary">#0A0A14</color>
+    <color name="bg_secondary">#12121F</color>
+    <color name="bg_card">#16162A</color>
+    <color name="bg_tertiary">#1A1A2E</color>
+
+    <!-- Accent -->
+    <color name="accent_purple">#7C5CFC</color>
+    <color name="accent_purple_light">#A78BFA</color>
+    <color name="accent_cyan">#38BDF8</color>
+
+    <!-- Semantic -->
+    <color name="color_success">#34D399</color>
+    <color name="color_danger">#F87171</color>
+    <color name="color_warning">#FBBF24</color>
+
+    <!-- Text -->
+    <color name="text_primary">#F0EEFF</color>
+    <color name="text_secondary">#A09AC5</color>
+    <color name="text_hint">#6B6491</color>
+
+    <!-- Borders -->
+    <color name="border_default">#2A2A44</color>
+    <color name="border_accent">#3D2F7A</color>
+</resources>

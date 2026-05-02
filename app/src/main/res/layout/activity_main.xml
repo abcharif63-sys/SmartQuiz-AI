@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0A0A14"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- ===== HEADER ===== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="28dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SmartQuiz AI"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🧠"
+                android:textSize="28sp"/>
+        </LinearLayout>
+
+        <!-- ===== STATS ROW ===== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:background="@drawable/card_bg"
+                android:padding="12dp"
+                android:gravity="center"
+                android:layout_marginEnd="6dp">
+                <TextView
+                    android:id="@+id/statDocs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="#A78BFA"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Docs"
+                    android:textSize="11sp"
+                    android:textColor="#6B6491"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:background="@drawable/card_bg"
+                android:padding="12dp"
+                android:gravity="center"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp">
+                <TextView
+                    android:id="@+id/statQuizzes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="#38BDF8"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Quiz"
+                    android:textSize="11sp"
+                    android:textColor="#6B6491"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:background="@drawable/card_bg"
+                android:padding="12dp"
+                android:gravity="center"
+                android:layout_marginStart="6dp">
+                <TextView
+                    android:id="@+id/statScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="#34D399"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Moy."
+                    android:textSize="11sp"
+                    android:textColor="#6B6491"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ===== IMPORT ZONE ===== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MES DOCUMENTS"
+            android:textSize="11sp"
+            android:textColor="#6B6491"
+            android:letterSpacing="0.1"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Fichier sélectionné -->
+        <LinearLayout
+            android:id="@+id/fileCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/card_accent_bg"
+            android:padding="16dp"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/fileIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📄"
+                android:textSize="28sp"
+                android:layout_marginEnd="14dp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/fileName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="document.pdf"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+                <TextView
+                    android:id="@+id/fileType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PDF"
+                    android:textColor="#A09AC5"
+                    android:textSize="12sp"
+                    android:layout_marginTop="2dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/btnRemoveFile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="✕"
+                android:textColor="#6B6491"
+                android:textSize="16sp"
+                android:padding="4dp"/>
+        </LinearLayout>
+
+        <!-- Zone d'import -->
+        <LinearLayout
+            android:id="@+id/uploadZone"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:orientation="vertical"
+            android:background="@drawable/upload_zone_bg"
+            android:gravity="center"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📂"
+                android:textSize="32sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Appuie pour importer"
+                android:textColor="#A09AC5"
+                android:textSize="14sp"
+                android:layout_marginTop="6dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PDF · PPT · PPTX"
+                android:textColor="#6B6491"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+        <!-- ===== CONFIGURATION QUIZ ===== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CONFIGURATION DU QUIZ"
+            android:textSize="11sp"
+            android:textColor="#6B6491"
+            android:letterSpacing="0.1"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Nombre de questions -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_bg"
+            android:padding="16dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre de questions"
+                android:textColor="#A09AC5"
+                android:textSize="13sp"
+                android:layout_marginBottom="12dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <Button
+                    android:id="@+id/btnMinus"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:text="−"
+                    android:textSize="20sp"
+                    android:background="@drawable/btn_round_bg"
+                    android:textColor="#A09AC5"
+                    android:padding="0dp"/>
+
+                <TextView
+                    android:id="@+id/countDisplay"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="5"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="#A78BFA"
+                    android:gravity="center"
+                    android:layout_marginHorizontal="8dp"/>
+
+                <Button
+                    android:id="@+id/btnPlus"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:text="+"
+                    android:textSize="20sp"
+                    android:background="@drawable/btn_round_bg"
+                    android:textColor="#A09AC5"
+                    android:padding="0dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="questions"
+                    android:textColor="#6B6491"
+                    android:textSize="13sp"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Types de questions -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_bg"
+            android:padding="16dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Types de questions"
+                android:textColor="#A09AC5"
+                android:textSize="13sp"
+                android:layout_marginBottom="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/chipQCM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="QCM"
+                    android:background="@drawable/chip_active_bg"
+                    android:textColor="#A78BFA"
+                    android:textSize="13sp"
+                    android:paddingHorizontal="14dp"
+                    android:paddingVertical="7dp"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/chipVF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vrai/Faux"
+                    android:background="@drawable/chip_active_bg"
+                    android:textColor="#A78BFA"
+                    android:textSize="13sp"
+                    android:paddingHorizontal="14dp"
+                    android:paddingVertical="7dp"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/chipOpen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ouvertes"
+                    android:background="@drawable/chip_inactive_bg"
+                    android:textColor="#6B6491"
+                    android:textSize="13sp"
+                    android:paddingHorizontal="14dp"
+                    android:paddingVertical="7dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Difficulté -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_bg"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Difficulté"
+                android:textColor="#A09AC5"
+                android:textSize="13sp"
+                android:layout_marginBottom="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/diffFacile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Facile"
+                    android:background="@drawable/chip_active_bg"
+                    android:textColor="#A78BFA"
+                    android:textSize="13sp"
+                    android:paddingHorizontal="14dp"
+                    android:paddingVertical="7dp"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/diffMoyen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Moyen"
+                    android:background="@drawable/chip_inactive_bg"
+                    android:textColor="#6B6491"
+                    android:textSize="13sp"
+                    android:paddingHorizontal="14dp"
+                    android:paddingVertical="7dp"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/diffDifficile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Difficile"
+                    android:background="@drawable/chip_inactive_bg"
+                    android:textColor="#6B6491"
+                    android:textSize="13sp"
+                    android:paddingHorizontal="14dp"
+                    android:paddingVertical="7dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ===== BOUTON GÉNÉRER ===== -->
+        <Button
+            android:id="@+id/btnGenerate"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:text="🤖  Générer le Quiz avec l'IA"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/btn_primary_bg"
+            android:layout_marginBottom="12dp"/>
+
+        <Button
+            android:id="@+id/btnImport"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="📂  Importer PDF / PPT"
+            android:textSize="14sp"
+            android:textColor="#A09AC5"
+            android:background="@drawable/btn_ghost_bg"
+            android:layout_marginBottom="24dp"/>
+
+    </LinearLayout>
+</ScrollView>

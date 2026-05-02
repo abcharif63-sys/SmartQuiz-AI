@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.SmartQuizAI" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#7C5CFC</item>
+        <item name="colorPrimaryVariant">#5B3FD4</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSurface">#16162A</item>
+        <item name="colorOnSurface">#F0EEFF</item>
+        <item name="android:windowBackground">#0A0A14</item>
+        <item name="android:statusBarColor">#0A0A14</item>
+        <item name="android:navigationBarColor">#12121F</item>
+        <item name="android:textColorHint">#6B6491</item>
+    </style>
+</resources>

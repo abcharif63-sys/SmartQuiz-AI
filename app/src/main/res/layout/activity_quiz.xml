@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#0A0A14">
+
+    <!-- ===== TOPBAR ===== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#12121F"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/questionCounter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Question 1/5"
+                android:textColor="#A09AC5"
+                android:textSize="13sp"/>
+
+            <TextView
+                android:id="@+id/scoreDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Score: 0"
+                android:textColor="#34D399"
+                android:textSize="13sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:max="100"
+            android:progress="20"
+            android:progressDrawable="@drawable/progress_bar_bg"/>
+    </LinearLayout>
+
+    <!-- ===== CONTENU SCROLLABLE ===== -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Badge type -->
+            <TextView
+                android:id="@+id/questionTypeBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="● QCM"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="#A78BFA"
+                android:background="@drawable/badge_qcm_bg"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:layout_marginBottom="14dp"/>
+
+            <!-- Question -->
+            <TextView
+                android:id="@+id/questionText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Question en cours de chargement..."
+                android:textColor="#F0EEFF"
+                android:textSize="17sp"
+                android:lineSpacingMultiplier="1.5"
+                android:layout_marginBottom="20dp"/>
+
+            <!-- Choix QCM -->
+            <LinearLayout
+                android:id="@+id/choicesContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+
+            <!-- Réponse ouverte -->
+            <EditText
+                android:id="@+id/openAnswerInput"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:hint="Tape ta réponse ici..."
+                android:textColorHint="#6B6491"
+                android:textColor="#F0EEFF"
+                android:textSize="14sp"
+                android:background="@drawable/card_bg"
+                android:padding="14dp"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:visibility="gone"/>
+
+            <!-- Feedback -->
+            <LinearLayout
+                android:id="@+id/feedbackBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/feedback_correct_bg"
+                android:padding="14dp"
+                android:layout_marginTop="14dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/feedbackIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="✓"
+                    android:textColor="#34D399"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="10dp"/>
+
+                <TextView
+                    android:id="@+id/feedbackText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textColor="#A09AC5"
+                    android:textSize="13sp"
+                    android:lineSpacingMultiplier="1.5"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- ===== ACTIONS ===== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#12121F"
+        android:padding="16dp">
+
+        <Button
+            android:id="@+id/btnValidate"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Valider"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:background="@drawable/btn_primary_bg"
+            android:enabled="false"/>
+
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Suivant →"
+            android:textColor="#A78BFA"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:background="@drawable/btn_ghost_bg"
+            android:layout_marginStart="10dp"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+</LinearLayout>

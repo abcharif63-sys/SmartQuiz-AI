@@ -1,141 +1,111 @@
 package ma.uca.smartquizai
 
 import android.util.Log
+import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.generationConfig
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.OutputStreamWriter
-import java.net.HttpURLConnection
-import java.net.URL
 
 object ClaudeApiService {
 
-    private const val BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
-    private val API_KEY = BuildConfig.GEMINI_API_KEY
+    // Initialisation du modèle avec la clé API du BuildConfig
+    private val generativeModel = GenerativeModel(
+        modelName = "gemini-1.5-flash",
+        apiKey = BuildConfig.GEMINI_API_KEY,
+        generationConfig = generationConfig {
+            // Force la réponse en format JSON si supporté par le SDK
+            responseMimeType = "application/json"
+        }
+    )
 
-    fun generateQuestions(
+    /**
+     * Génère des questions de quiz en utilisant le SDK Google AI.
+     * Cette fonction est suspendue car l'appel au SDK est asynchrone.
+     */
+    suspend fun generateQuestions(
         courseText: String,
         count: Int,
         types: List<String>,
         difficulty: String
     ): List<Question> {
-
-        Log.d("GeminiAPI", "=== DÉBUT generateQuestions ===")
-        Log.d("GeminiAPI", "Longueur texte: ${courseText.length}")
-        Log.d("GeminiAPI", "Clé API présente: ${API_KEY.isNotEmpty()}")
-        Log.d("GeminiAPI", "Clé (5 premiers chars): ${API_KEY.take(5)}")
-
-        if (courseText.trim().length < 20) {
-            Log.e("GeminiAPI", "ÉCHEC: texte trop court")
+        Log.d("GeminiAPI", "=== DÉBUT generateQuestions (SDK Official) ===")
+        
+        if (courseText.trim().length < 20) return emptyList()
+        if (BuildConfig.GEMINI_API_KEY.isEmpty()) {
+            Log.e("GeminiAPI", "Clé API manquante dans local.properties")
             return emptyList()
         }
 
-        if (API_KEY.isEmpty()) {
-            Log.e("GeminiAPI", "ÉCHEC: clé API vide")
-            return emptyList()
-        }
+        val prompt = """
+            Agis en tant qu'expert en pédagogie. Génère $count questions de quiz basées sur le texte fourni.
+            Difficulté : $difficulty
+            Types autorisés : ${types.joinToString(", ")}
+            
+            Texte de référence : ${courseText.take(4000)}
 
-        // Prompt simplifié pour maximiser les chances
-        val prompt = """Génère $count questions de quiz en JSON sur ce texte.
-Difficulté: $difficulty.
-Texte: ${courseText.take(3000)}
+            Réponds UNIQUEMENT avec un tableau JSON valide suivant exactement cette structure :
+            [
+              {
+                "type": "qcm",
+                "question": "Texte de la question",
+                "choices": ["Option A", "Option B", "Option C", "Option D"],
+                "correct": 0,
+                "explanation": "Explication de la réponse"
+              }
+            ]
+            Pour le type 'vf' (Vrai/Faux), utilise deux choix ["Vrai", "Faux"].
+        """.trimIndent()
 
-Réponds UNIQUEMENT avec ce JSON (sans markdown) :
-[{"type":"qcm","question":"?","choices":["A","B","C","D"],"correct":0,"explanation":"..."}]"""
-
-        Log.d("GeminiAPI", "Appel API en cours...")
-        val responseText = callGemini(prompt)
-
-        if (responseText == null) {
-            Log.e("GeminiAPI", "ÉCHEC: réponse null de l'API")
-            return emptyList()
-        }
-
-        Log.d("GeminiAPI", "Réponse reçue (200 chars): ${responseText.take(200)}")
-        return parseGeminiResponse(responseText)
-    }
-
-    private fun callGemini(prompt: String): String? {
         return try {
-            val url = URL("$BASE_URL?key=$API_KEY")
-            val conn = url.openConnection() as HttpURLConnection
-            conn.requestMethod = "POST"
-            conn.setRequestProperty("Content-Type", "application/json")
-            conn.doOutput = true
-            conn.connectTimeout = 30000
-            conn.readTimeout   = 30000
-
-            val body = JSONObject().apply {
-                put("contents", JSONArray().put(
-                    JSONObject().apply {
-                        put("parts", JSONArray().put(
-                            JSONObject().put("text", prompt)
-                        ))
-                    }
-                ))
-            }.toString()
-
-            OutputStreamWriter(conn.outputStream, Charsets.UTF_8).use { it.write(body) }
-
-            val code = conn.responseCode
-            Log.d("GeminiAPI", "HTTP response code: $code")
-
-            if (code == 200) {
-                conn.inputStream.bufferedReader(Charsets.UTF_8).use { it.readText() }
-            } else {
-                val error = conn.errorStream?.bufferedReader(Charsets.UTF_8)?.use { it.readText() }
-                Log.e("GeminiAPI", "Erreur HTTP $code: $error")
-                null
+            val response = generativeModel.generateContent(prompt)
+            val responseText = response.text ?: ""
+            
+            if (responseText.isEmpty()) {
+                Log.e("GeminiAPI", "Réponse vide du SDK")
+                return emptyList()
             }
+
+            parseGeminiResponse(responseText)
         } catch (e: Exception) {
-            Log.e("GeminiAPI", "Exception réseau: ${e.javaClass.simpleName}: ${e.message}")
-            null
+            Log.e("GeminiAPI", "Erreur SDK Gemini: ${e.message}", e)
+            emptyList()
         }
     }
 
-    private fun parseGeminiResponse(response: String): List<Question> {
+    private fun parseGeminiResponse(responseText: String): List<Question> {
         return try {
-            val root       = JSONObject(response)
-            val candidates = root.optJSONArray("candidates") ?: run {
-                Log.e("GeminiAPI", "Pas de 'candidates' dans la réponse")
-                return emptyList()
-            }
+            // Nettoyage au cas où le modèle entoure le JSON de balises markdown
+            val cleanedJson = responseText.trim()
+                .removePrefix("```json")
+                .removePrefix("```")
+                .removeSuffix("```")
+                .trim()
 
-            val content = candidates.getJSONObject(0).optJSONObject("content") ?: run {
-                Log.e("GeminiAPI", "Pas de 'content' dans candidates[0]")
-                return emptyList()
-            }
+            val array = JSONArray(cleanedJson)
+            val questions = mutableListOf<Question>()
 
-            val text = content.getJSONArray("parts").getJSONObject(0).getString("text")
-            Log.d("GeminiAPI", "Texte brut Gemini: ${text.take(300)}")
-
-            // Cherche [ ... ] n'importe où dans la réponse
-            val start = text.indexOf("[")
-            val end   = text.lastIndexOf("]")
-
-            if (start == -1 || end == -1 || end <= start) {
-                Log.e("GeminiAPI", "JSON array introuvable dans: $text")
-                return emptyList()
-            }
-
-            val json  = text.substring(start, end + 1)
-            val array = JSONArray(json)
-            Log.d("GeminiAPI", "Questions parsées: ${array.length()}")
-
-            val list = mutableListOf<Question>()
             for (i in 0 until array.length()) {
-                val obj     = array.getJSONObject(i)
-                val choices = obj.optJSONArray("choices") ?: JSONArray()
-                list.add(Question(
-                    type        = obj.optString("type", "qcm"),
-                    question    = obj.optString("question", ""),
-                    choices     = (0 until choices.length()).map { choices.getString(it) },
-                    correct     = obj.optInt("correct", 0),
-                    explanation = obj.optString("explanation", "")
-                ))
+                val obj = array.getJSONObject(i)
+                val choicesJson = obj.optJSONArray("choices") ?: JSONArray()
+                val choicesList = mutableListOf<String>()
+                for (j in 0 until choicesJson.length()) {
+                    choicesList.add(choicesJson.getString(j))
+                }
+
+                questions.add(
+                    Question(
+                        type = obj.optString("type", "qcm"),
+                        question = obj.optString("question", ""),
+                        choices = choicesList,
+                        correct = obj.optInt("correct", 0),
+                        explanation = obj.optString("explanation", "")
+                    )
+                )
             }
-            list
+            Log.d("GeminiAPI", "Succès : ${questions.size} questions générées")
+            questions
         } catch (e: Exception) {
-            Log.e("GeminiAPI", "Erreur parsing JSON: ${e.message}")
+            Log.e("GeminiAPI", "Erreur lors du parsing JSON : ${e.message}\nBrut: $responseText")
             emptyList()
         }
     }

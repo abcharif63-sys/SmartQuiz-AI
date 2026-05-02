@@ -9,7 +9,7 @@ import java.net.URL
 
 object ClaudeApiService {
 
-    private const val BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
+    private const val BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
     private val API_KEY = BuildConfig.GEMINI_API_KEY
 
     fun generateQuestions(

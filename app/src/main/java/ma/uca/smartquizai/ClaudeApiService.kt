@@ -6,7 +6,7 @@ import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
-
+import ma.uca.smartquizai.BuildConfig
 
 /**
  * Service d'appel à l'API Google Gemini (Solution Gratuite).

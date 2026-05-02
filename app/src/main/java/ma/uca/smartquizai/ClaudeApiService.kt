@@ -7,15 +7,17 @@ import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 
+
 /**
  * Service d'appel à l'API Google Gemini (Solution Gratuite).
+ * Utilise la clé API définie dans local.properties via BuildConfig.
  */
 object ClaudeApiService {
 
     private const val BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
     
-    // ⚠️ TA CLÉ GEMINI (Vérifie qu'elle est bien copiée sans espaces)
-    private const val API_KEY = "AIzaSyAsNyj9Pa4OfqSFBM_JBjFx8yuxnsD73EI"
+    // On utilise la clé sécurisée générée dans BuildConfig
+    private val API_KEY = BuildConfig.GEMINI_API_KEY
 
     fun generateQuestions(
         courseText: String,
@@ -23,9 +25,13 @@ object ClaudeApiService {
         types: List<String>,
         difficulty: String
     ): List<Question> {
-        // Si le texte est trop court, l'IA ne pourra rien faire
         if (courseText.trim().length < 20) {
             Log.e("GeminiAPI", "Texte du cours trop court ou vide.")
+            return emptyList()
+        }
+
+        if (API_KEY.isEmpty()) {
+            Log.e("GeminiAPI", "Clé API manquante. Ajoutez GEMINI_API_KEY=votre_cle dans local.properties")
             return emptyList()
         }
 
@@ -97,7 +103,6 @@ object ClaudeApiService {
             val content = candidates.getJSONObject(0).optJSONObject("content") ?: return emptyList()
             val textResponse = content.getJSONArray("parts").getJSONObject(0).getString("text")
 
-            // Extraction du JSON entre les crochets [ ] au cas où Gemini ajoute du texte
             val start = textResponse.indexOf("[")
             val end = textResponse.lastIndexOf("]")
             if (start == -1 || end == -1) {
